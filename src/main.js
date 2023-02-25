@@ -14,6 +14,11 @@ import App from './App.vue'
 import router from './router'
 import './assets/all.scss'
 
+import { date, currency } from './methods/filters'
+
+import Loading from 'vue3-loading-overlay'
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
+
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule])
 })
@@ -27,10 +32,17 @@ configure({
 setLocale('zh_TW')
 
 const app = createApp(App)
-
+app.config.globalProperties.$filters = {
+  date,
+  currency
+}
 app.use(VueAxios, axios)
+app.use(router)
+
 app.component('VForm', Form)
 app.component('VField', Field)
 app.component('ErrorMessage', ErrorMessage)
-app.use(router)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Loading', Loading)
+
 app.mount('#app')
